@@ -1,0 +1,35 @@
+.cr-home {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  &-menu {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    &-item {
+      &--button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 4rem;
+        width: 4rem;
+        border-radius: 1rem;
+        background-color: $secondary;
+      }
+    }
+  }
+  &-break {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    &-line {
+      content: "";
+      background-color: $black;
+      width: 30%;
+      height: 1px;
+      align-items: center;
+    }
+  }
+}

@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";
 import AuthLayout from "./components/AuthLayout";
+import Home from "./pages/Home";
 
 // import AuthLayout from "./components/AuthLayout";
 
@@ -16,7 +17,7 @@ function App() {
         <DefaultLayout>
           <Routes>
             <Route path="/" element={<PrivateRoute />}>
-              <Route path="/" element={<AuthLayout></AuthLayout>} />
+              <Route path="/" element={<Home />} />
             </Route>
             <Route exact path="/login" element={<Login />}></Route>
           </Routes>
