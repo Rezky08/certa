@@ -1,7 +1,5 @@
 import React from "react";
 import AuthContext from "./AuthContext";
-import { getMe } from "../functions/Auth";
-import { withRouter } from "react-router";
 
 class RequireAuth extends React.Component {
   constructor(props) {
@@ -9,16 +7,15 @@ class RequireAuth extends React.Component {
 
     this.setUser = this.setUser.bind(this);
     this.state = {
-      user: JSON.parse(localStorage.getItem("user")) ?? props.user ?? null,
+      user: localStorage.getItem("token") ?? props.user ?? null,
       setUser: this.setUser,
     };
-
-    getMe();
   }
 
   setUser(user) {
     this.setState({ user });
   }
+
   render() {
     return (
       <AuthContext.Provider value={this.state}>
@@ -28,4 +25,4 @@ class RequireAuth extends React.Component {
   }
 }
 
-export default withRouter(RequireAuth);
+export default RequireAuth;

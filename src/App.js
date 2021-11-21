@@ -14,7 +14,9 @@ function App() {
       <div className="App">
         <DefaultLayout>
           <Routes>
-            <Route path="/" element={<PrivateRoute />}></Route>
+            <Route path="/" element={<PrivateRoute />}>
+              <Route path="/" element={<div>test</div>} />
+            </Route>
             <Route exact path="/login" element={<Login />}></Route>
           </Routes>
         </DefaultLayout>

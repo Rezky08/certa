@@ -3,6 +3,7 @@ import LoginBody from "../components/login/LoginBody";
 import LoginFooter from "../components/login/LoginFooter";
 import LoginHeader from "../components/login/LoginHeader";
 import { login } from "../api/auth";
+import AuthContext from "../components/AuthContext";
 
 class Login extends React.Component {
   constructor(props) {
@@ -18,19 +19,25 @@ class Login extends React.Component {
   onChange(state) {
     this.setState(state);
   }
-  onSubmit() {
+  onSubmit(callback) {
     login(this.state).then((data) => {
-      console.log(data);
+      callback(data);
     });
   }
 
   render() {
     return (
-      <div className="cr-login">
-        <LoginHeader />
-        <LoginBody onChange={this.onChange} />
-        <LoginFooter onSubmit={this.onSubmit} />
-      </div>
+      <AuthContext.Consumer>
+        {({ user, setUser }) => {
+          return (
+            <div className="cr-login">
+              <LoginHeader />
+              <LoginBody onChange={this.onChange} />
+              <LoginFooter onSubmit={() => this.onSubmit(setUser)} />
+            </div>
+          );
+        }}
+      </AuthContext.Consumer>
     );
   }
 }

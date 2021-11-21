@@ -2,6 +2,7 @@ import React from "react";
 import LoadingContext from "./LoadingContext";
 import SplashScreen from "./SplashScreen";
 import { setToken } from "../api/setToken";
+import RequireAuth from "./RequireAuth";
 
 class DefaultLayout extends React.Component {
   constructor(props) {
@@ -23,9 +24,11 @@ class DefaultLayout extends React.Component {
   render() {
     return (
       <div className="cr-default-layout">
-        <LoadingContext.Provider value={this.state}>
-          {this.state.isLoading ? <SplashScreen /> : this.props.children}
-        </LoadingContext.Provider>
+        <RequireAuth>
+          <LoadingContext.Provider value={this.state}>
+            {this.state.isLoading ? <SplashScreen /> : this.props.children}
+          </LoadingContext.Provider>
+        </RequireAuth>
       </div>
     );
   }
