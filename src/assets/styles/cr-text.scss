@@ -1,0 +1,17 @@
+.cr-text {
+  &--large {
+    font-size: large !important;
+  }
+
+  &--small {
+    font-size: small;
+  }
+
+  &--bold {
+    font-weight: $font-weight-bold !important;
+  }
+
+  &--title {
+    font-family: "Inika", serif;
+  }
+}
