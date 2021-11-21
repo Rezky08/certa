@@ -1,0 +1,10 @@
+.cr-icon {
+  display: flex;
+  align-items: center;
+  svg {
+    fill: currentColor !important;
+  }
+  &-clickable {
+    cursor: pointer;
+  }
+}

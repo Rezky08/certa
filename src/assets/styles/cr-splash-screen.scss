@@ -1,0 +1,14 @@
+.cr-splash-screen {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: $base-color;
+  &--container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
