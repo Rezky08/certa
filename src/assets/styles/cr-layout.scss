@@ -1,0 +1,15 @@
+.cr-layout {
+  height: 100vh;
+  width: 100vw;
+  &-header {
+    height: 15%;
+    background-color: $secondary;
+  }
+  &-body {
+    height: 75%;
+  }
+  &-footer {
+    height: 10%;
+    background-color: $secondary;
+  }
+}
