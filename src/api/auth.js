@@ -2,7 +2,7 @@ import api from "./api";
 
 const login = async (params) => {
   return api.post("auth/login", params).then(({ data }) => {
-    const { token } = data;
+    const { token } = data.data;
     localStorage.setItem("token", token);
     return token;
   });
