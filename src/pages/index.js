@@ -2,6 +2,8 @@ import Home from "./Home";
 import Login from "./Login";
 import AuthLayout from "../components/AuthLayout";
 import { Route } from "react-router-dom";
+import SayembaraList from "./Sayembara";
+import SayembaraHeader from "../components/sayembara/SayembaraHeader";
 
 const pagesWithAuth = [
   {
@@ -11,6 +13,11 @@ const pagesWithAuth = [
   {
     path: "/search",
     component: <Home />,
+  },
+  {
+    path: "/sayembara",
+    component: <SayembaraList />,
+    header: <SayembaraHeader />,
   },
 ];
 
@@ -28,7 +35,11 @@ const displayPagesWithAuth = () =>
         key={value.path}
         exact
         path={value.path}
-        element={<AuthLayout>{value.component}</AuthLayout>}
+        element={
+          <AuthLayout header={value.header ?? null}>
+            {value.component}
+          </AuthLayout>
+        }
       />
     );
   });

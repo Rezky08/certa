@@ -27,14 +27,20 @@ class Home extends React.Component {
     return (
       <div className="cr-home">
         <div className="cr-home-menu">
-          <HomeMenuItem title="Event" />
+          <HomeMenuItem to="/sayembara" title="Sayembara" />
           <HomeMenuItem title="Lost item" />
           <HomeMenuItem title="Funding" />
         </div>
         <div className="cr-home-break">
-          <div className="cr-home-break-line"></div>
-          <span className="cr-home-break-text">TOP</span>
-          <div className="cr-home-break-line"></div>
+          <div className="cr-home-break-line">
+            <span></span>
+          </div>
+          <span className="cr-home-break-text">
+            <span>TOP</span>
+          </span>
+          <div className="cr-home-break-line">
+            <span></span>
+          </div>
         </div>
         <div className="cr-home-popular">
           <SayembaraCard title="Logo Design" />

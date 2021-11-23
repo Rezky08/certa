@@ -1,18 +1,25 @@
-$footer-height: 3rem;
+$footer-height: 5rem;
 .cr-layout {
   height: 100vh;
   width: 100vw;
   &-header {
     height: 15%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
   }
   &-body {
     height: 85%;
+    padding-bottom: $footer-height + 2rem;
+    padding-left: $padding-border;
+    padding-right: $padding-border;
   }
   &-footer {
     position: fixed;
     bottom: 0;
     // height: $footer-height;
-    height: 10%;
+    height: $footer-height;
     width: 100%;
     background-color: $secondary;
   }

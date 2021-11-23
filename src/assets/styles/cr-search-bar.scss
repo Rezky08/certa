@@ -1,0 +1,8 @@
+.cr-search-bar {
+  &--input {
+    border-radius: $border-corner-input;
+    & > div {
+      border-radius: $border-corner-input;
+    }
+  }
+}
