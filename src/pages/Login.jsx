@@ -4,6 +4,7 @@ import LoginFooter from "../components/login/LoginFooter";
 import LoginHeader from "../components/login/LoginHeader";
 import { login } from "../api/auth";
 import AuthContext from "../components/AuthContext";
+import { Navigate } from "react-router-dom";
 
 class Login extends React.Component {
   constructor(props) {
@@ -29,7 +30,9 @@ class Login extends React.Component {
     return (
       <AuthContext.Consumer>
         {({ user, setUser }) => {
-          return (
+          return user ? (
+            <Navigate to="/" />
+          ) : (
             <div className="cr-login">
               <LoginHeader />
               <LoginBody onChange={this.onChange} />

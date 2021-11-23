@@ -9,6 +9,9 @@
     flex-wrap: wrap;
     justify-content: space-around;
     &-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
       &--button {
         display: flex;
         justify-content: center;
@@ -16,7 +19,7 @@
         height: 4rem;
         width: 4rem;
         border-radius: 1rem;
-        background-color: $secondary;
+        background-color: $secondary !important;
       }
     }
   }
@@ -31,5 +34,12 @@
       height: 1px;
       align-items: center;
     }
+  }
+  &-popular {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: $padding-border;
+    padding-right: $padding-border;
   }
 }
