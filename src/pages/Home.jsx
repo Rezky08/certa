@@ -26,6 +26,7 @@ class Home extends React.Component {
   render() {
     return (
       <div className="cr-home">
+        <div className="cr-home-header"></div>
         <div className="cr-home-menu">
           <HomeMenuItem to="/sayembara" title="Sayembara" />
           <HomeMenuItem title="Lost item" />

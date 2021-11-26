@@ -8,7 +8,10 @@ class SayembaraHeader extends React.Component {
       <div className="cr-sayembara-header">
         <div className="cr-sayembara-header-container">
           <div className="cr-sayembara-header--search">
-            <SearchBar />
+            <SearchBar
+              onSearch={this.props.onSearch}
+              onChange={this.props.onChange}
+            />
           </div>
           <div className="cr-sayembara-header--actions">
             <IconButton>
@@ -23,5 +26,10 @@ class SayembaraHeader extends React.Component {
     );
   }
 }
+
+SayembaraHeader.defaultProps = {
+  onSearch: () => {},
+  onChange: () => {},
+};
 
 export default SayembaraHeader;

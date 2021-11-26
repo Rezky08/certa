@@ -3,7 +3,7 @@ import LoginBody from "../components/login/LoginBody";
 import LoginFooter from "../components/login/LoginFooter";
 import LoginHeader from "../components/login/LoginHeader";
 import { login } from "../api/auth";
-import AuthContext from "../components/AuthContext";
+import AuthContext from "../components/context/AuthContext";
 import { Navigate } from "react-router-dom";
 
 class Login extends React.Component {

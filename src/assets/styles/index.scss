@@ -6,6 +6,13 @@ body {
   font-family: "Inter", sans-serif;
   color: $black;
 }
+a {
+  &,
+  &:hover,
+  &:visited {
+    text-decoration: none;
+  }
+}
 @import "./cr-icon.scss";
 @import "./cr-splash-screen.scss";
 @import "./cr-loading.scss";
@@ -19,3 +26,6 @@ body {
 @import "./cr-sayembara-card.scss";
 @import "./cr-search-bar.scss";
 @import "./cr-sayembara-header.scss";
+@import "./cr-sayembara.scss";
+@import "./cr-sayembara-detail.scss";
+@import "./cr-sayembara-chips.scss";

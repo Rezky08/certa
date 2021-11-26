@@ -1,16 +1,25 @@
 import React from "react";
-import SayembaraCard from "../components/SayembaraCard";
+import AuthLayoutBody from "../components/AuthLayoutBody";
+import SayembaraBody from "../components/sayembara/SayembaraBody";
+import SayembaraHeader from "../components/sayembara/SayembaraHeader";
 
-class SayembaraList extends React.Component {
+class Sayembara extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onSearch = this.onSearch.bind(this);
+  }
+  onSearch(value) {
+    console.log(value);
+  }
   render() {
     return (
-      <div className="cr-sayembara-list">
-        <div className="cr-sayembara-list-body">
-          <SayembaraCard />
+      <AuthLayoutBody header={<SayembaraHeader onSearch={this.onSearch} />}>
+        <div className="cr-sayembara">
+          <SayembaraBody />
         </div>
-      </div>
+      </AuthLayoutBody>
     );
   }
 }
 
-export default SayembaraList;
+export default Sayembara;

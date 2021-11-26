@@ -2,24 +2,16 @@
 import "./App.css";
 import "./assets/styles/index.scss";
 import DefaultLayout from "./components/DefaultLayout";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PrivateRoute from "./components/PrivateRoute";
-import { displayPagesWithAuth, displayPagesWithoutAuth } from "./pages";
+import { useRoutes } from "react-router-dom";
+import React from "react";
+import { pages } from "./pages";
 
 function App() {
+  let element = useRoutes(pages);
   return (
-    <Router>
-      <div className="App">
-        <DefaultLayout>
-          <Routes>
-            <Route path="/" element={<PrivateRoute />}>
-              {displayPagesWithAuth()}
-            </Route>
-            {displayPagesWithoutAuth()}
-          </Routes>
-        </DefaultLayout>
-      </div>
-    </Router>
+    <div className="App">
+      <DefaultLayout>{element}</DefaultLayout>
+    </div>
   );
 }
 

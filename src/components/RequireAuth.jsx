@@ -1,5 +1,5 @@
 import React from "react";
-import AuthContext from "./AuthContext";
+import AuthContext from "./context/AuthContext";
 
 class RequireAuth extends React.Component {
   constructor(props) {
@@ -7,7 +7,7 @@ class RequireAuth extends React.Component {
 
     this.setUser = this.setUser.bind(this);
     this.state = {
-      user: localStorage.getItem("token") ?? props.user ?? null,
+      user: localStorage.getItem("authorization") ?? props.user ?? null,
       setUser: this.setUser,
     };
   }

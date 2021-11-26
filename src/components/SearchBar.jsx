@@ -5,6 +5,24 @@ import React from "react";
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      text: props.text ?? null,
+    };
+    this.setText = this.setText.bind(this);
+    this.onSearch = this.onSearch.bind(this);
+  }
+
+  setText(value, callback = () => {}) {
+    this.setState(
+      {
+        text: value ?? this.state.text,
+      },
+      () => callback(value)
+    );
+  }
+
+  onSearch() {
+    this.props.onSearch(this.state.text);
   }
 
   render() {
@@ -14,13 +32,11 @@ class SearchBar extends React.Component {
           size="small"
           className="cr-search-bar--input"
           variant="outlined"
-          onChange={(e) => {
-            this.props.onChange(e.target.value);
-          }}
+          onChange={(e) => this.setText(e.target.value, this.props.onChange)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <IconButton onClick={this.props.onSearch}>
+                <IconButton onClick={this.onSearch}>
                   <Search />
                 </IconButton>
               </InputAdornment>

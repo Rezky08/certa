@@ -1,0 +1,78 @@
+.cr-sayembara-detail {
+  &-banner {
+    height: 20vh;
+    width: 100vw;
+    background-color: red;
+  }
+  &-container {
+    height: 80vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: relative;
+  }
+  &-card {
+    transform: translateY(-2rem);
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // padding: $padding-border / 2;
+    // position: relative;
+
+    &-header {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      border-bottom: 1px solid rgba($black, 0.1);
+      padding: $padding-border / 2 0;
+      &--container {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+      &--title {
+        font-weight: $font-weight-bold;
+        font-size: large;
+        text-transform: capitalize;
+        text-align: left;
+      }
+      &--detail {
+        color: $peach;
+      }
+    }
+    &-body {
+      &--container {
+        height: 80%;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+      display: flex;
+      flex-direction: column;
+      & > * {
+        border-bottom: 1px solid rgba($black, 0.1);
+        padding: $padding-border / 2 0;
+      }
+      & > *:nth-last-child(1) {
+        border-bottom: none;
+      }
+    }
+    &-footer {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      button {
+        background-color: $base-color-dark;
+        font-weight: $font-weight-bold;
+      }
+    }
+    &-item {
+      &--title {
+        font-weight: $font-weight-bold;
+        text-transform: capitalize;
+        text-align: left;
+      }
+    }
+  }
+}
