@@ -5,11 +5,13 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Chip,
 } from "@mui/material";
 import { withParams } from "components/route/WithParams";
 import { Link } from "react-router-dom";
 import Upload from "components/Upload";
 import { uploadTest } from "api/fileUpload";
+import { DateRange, Timer, UploadFile } from "@mui/icons-material";
 
 function SayembaraSubmitButton(props) {
   const onClick = () => {
@@ -79,7 +81,7 @@ class SayembaraSubmission extends React.Component {
   static Item = SayembaraDetailItem;
   render() {
     return (
-      <div className="cr-sayembara-detail">
+      <div className="cr-sayembara-detail cr-sayembara-submission">
         <div className="cr-sayembara-detail-banner"></div>
         <div className="cr-sayembara-detail-container">
           <Card className="cr-sayembara-detail-card">
@@ -93,13 +95,39 @@ class SayembaraSubmission extends React.Component {
                 </div>
               }
             />
-            <CardContent className="cr-sayembara-detail-card-body--container">
-              <div className="cr-sayembara-detail-card-body">
-                <Upload
-                  onChange={(value) =>
-                    this.setState({ files: value }, this.fileHandle)
-                  }
-                />
+            <CardContent className="cr-sayembara-detail-card-body--container cr-sayembara-submission-card-body--container">
+              <div className="cr-sayembara-detail-card-body cr-sayembara-submission-card-body">
+                <div className="cr-sayembara-submission-card--status">
+                  <Chip label={<span>No Attempt</span>} />
+                </div>
+                <div className="cr-sayembara-submission-card--detail">
+                  <Button
+                    startIcon={<DateRange />}
+                    className="cr-sayembara-submission-card--detail-item"
+                  >
+                    {this.props.end_date}
+                  </Button>
+                  <Button
+                    startIcon={<Timer />}
+                    className="cr-sayembara-submission-card--detail-item"
+                  >
+                    {this.props.end_date}
+                  </Button>
+                  <Upload
+                    uploadButton={
+                      <Button
+                        startIcon={<UploadFile />}
+                        component="span"
+                        className="cr-sayembara-submission-card--detail-item"
+                      >
+                        Upload Files
+                      </Button>
+                    }
+                    onChange={(value) =>
+                      this.setState({ files: value }, this.fileHandle)
+                    }
+                  />
+                </div>
               </div>
             </CardContent>
             <CardActions className="cr-sayembara-detail-card-footer">

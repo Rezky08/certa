@@ -10,6 +10,7 @@ class Upload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      uploadButton: props.uploadButton,
       labelNoFile: props.labelNoFile ?? "Upload",
       labelHasFile: props.labelNoFile,
       files: props.files ?? undefined,
@@ -29,11 +30,13 @@ class Upload extends React.Component {
             )
           }
         />
-        <Button variant="contained" component="span">
-          {this.state.files?.length > 0
-            ? this.state.labelHasFile ?? `${this.state.files?.length} Files`
-            : this.state.labelNoFile}
-        </Button>
+        {this.props.uploadButton ?? (
+          <Button variant="contained" component="span">
+            {this.state.files?.length > 0
+              ? this.state.labelHasFile ?? `${this.state.files?.length} Files`
+              : this.state.labelNoFile}
+          </Button>
+        )}
       </label>
     );
   }

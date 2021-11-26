@@ -1,0 +1,28 @@
+.cr-sayembara-submission {
+  &-card {
+    &-body {
+      & > * {
+        border-bottom: none;
+      }
+    }
+    &--status {
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
+      span {
+        font-weight: $font-weight-bold;
+      }
+    }
+    &--detail {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      &-item {
+        width: 100% !important;
+        justify-content: start !important;
+        background-color: $peach !important;
+        color: white !important;
+      }
+    }
+  }
+}
