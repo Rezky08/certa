@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import { withParams } from "components/route/WithParams";
-import SayembaraChips from "components/sayembara/SayembaraChips";
-import { Timer } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import SayembaraLayout from "components/SayembaraLayout";
 

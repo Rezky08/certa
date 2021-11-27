@@ -1,16 +1,7 @@
 import React from "react";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Chip,
-} from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import { withParams } from "components/route/WithParams";
-import { Link } from "react-router-dom";
 import Upload from "components/Upload";
-import { uploadTest } from "api/fileUpload";
 import { DateRange, Timer, UploadFile } from "@mui/icons-material";
 import SayembaraLayout from "components/SayembaraLayout";
 
