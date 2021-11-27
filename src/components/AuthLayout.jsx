@@ -1,13 +1,15 @@
 import React from "react";
 
 import Icon from "../components/Icon";
-import { ReactComponent as HomeIcon } from "../assets/icon/Home.svg";
-import { ReactComponent as SearchIcon } from "../assets/icon/Search.svg";
-import { ReactComponent as NotificationIcon } from "../assets/icon/Notification.svg";
-import { ReactComponent as ProfileIcon } from "../assets/icon/Profile.svg";
 import { Link, Outlet } from "react-router-dom";
 import AuthLayoutContext from "./context/AuthLayoutContext";
 import { withRouter } from "./route/WithRouter";
+import {
+  HomeOutlined,
+  NotificationsOutlined,
+  PersonOutline,
+  Search,
+} from "@mui/icons-material";
 
 class AuthLayout extends React.Component {
   constructor(props) {
@@ -52,12 +54,12 @@ class AuthLayout extends React.Component {
             <div className="cr-bottom-navigation">
               <div className="cr-bottom-navigation--item">
                 <Link to="/">
-                  <Icon icon={<HomeIcon />} size="2rem" />
+                  <Icon icon={<HomeOutlined />} size="2rem" />
                 </Link>
               </div>
               <div className="cr-bottom-navigation--item">
                 <Link to="/search">
-                  <Icon icon={<SearchIcon />} size="2rem" />
+                  <Icon icon={<Search />} size="2rem" />
                 </Link>
               </div>
               <div className="cr-bottom-navigation--item">
@@ -68,12 +70,12 @@ class AuthLayout extends React.Component {
               </div>
               <div className="cr-bottom-navigation--item">
                 <Link to="/notification">
-                  <Icon icon={<NotificationIcon />} size="2rem" />
+                  <Icon icon={<NotificationsOutlined />} size="2rem" />
                 </Link>
               </div>
               <div className="cr-bottom-navigation--item">
                 <Link to="/profile">
-                  <Icon icon={<ProfileIcon />} size="2rem" />
+                  <Icon icon={<PersonOutline />} size="2rem" />
                 </Link>
               </div>
             </div>

@@ -2,10 +2,13 @@
   &-card {
     &-body {
       & > * {
-        border-bottom: none;
+        border-bottom: none !important;
       }
     }
     &--status {
+      &.submitted > * {
+        background-color: $success;
+      }
       display: flex;
       flex-direction: row;
       justify-content: start;
@@ -20,7 +23,7 @@
       &-item {
         width: 100% !important;
         justify-content: start !important;
-        background-color: $peach !important;
+        background-color: $color-base !important;
         color: white !important;
       }
     }

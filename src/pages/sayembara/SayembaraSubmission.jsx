@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Upload from "components/Upload";
 import { uploadTest } from "api/fileUpload";
 import { DateRange, Timer, UploadFile } from "@mui/icons-material";
+import SayembaraLayout from "components/SayembaraLayout";
 
 function SayembaraSubmitButton(props) {
   const onClick = () => {
@@ -31,21 +32,21 @@ function SayembaraSubmitButton(props) {
   );
 }
 
-function SayembaraDetailAddSubmissionButton({ sayembaraId }) {
+function SayembaraEditSubmitButton(props) {
   const onClick = () => {
-    console.log(sayembaraId);
+    // uploadTest(formdata).then((response) => {
+    //   console.log(response);
+    // });
   };
   return (
-    <Link to={`submission`} style={{ width: "100%" }}>
-      <Button
-        variant="contained"
-        fullWidth
-        onClick={onClick}
-        className="cr-button"
-      >
-        Add Submission
-      </Button>
-    </Link>
+    <Button
+      variant="contained"
+      fullWidth
+      onClick={onClick}
+      className="cr-button"
+    >
+      Edit Submission
+    </Button>
   );
 }
 
@@ -67,7 +68,7 @@ class SayembaraSubmission extends React.Component {
     super(props);
     this.state = {
       sayembaraId: 1,
-      isJoined: true,
+      isSubmitted: true,
       files: props.files ?? [],
     };
   }
@@ -80,62 +81,68 @@ class SayembaraSubmission extends React.Component {
   }
   static Item = SayembaraDetailItem;
   render() {
-    return (
-      <div className="cr-sayembara-detail cr-sayembara-submission">
-        <div className="cr-sayembara-detail-banner"></div>
-        <div className="cr-sayembara-detail-container">
-          <Card className="cr-sayembara-detail-card">
-            <CardHeader
-              className="cr-sayembara-detail-card-header--container"
-              title={
-                <div className="cr-sayembara-detail-card-header">
-                  <div className="cr-sayembara-detail-card-header--title">
-                    <span>Submission Status</span>
-                  </div>
-                </div>
-              }
-            />
-            <CardContent className="cr-sayembara-detail-card-body--container cr-sayembara-submission-card-body--container">
-              <div className="cr-sayembara-detail-card-body cr-sayembara-submission-card-body">
-                <div className="cr-sayembara-submission-card--status">
-                  <Chip label={<span>No Attempt</span>} />
-                </div>
-                <div className="cr-sayembara-submission-card--detail">
-                  <Button
-                    startIcon={<DateRange />}
-                    className="cr-sayembara-submission-card--detail-item"
-                  >
-                    {this.props.end_date}
-                  </Button>
-                  <Button
-                    startIcon={<Timer />}
-                    className="cr-sayembara-submission-card--detail-item"
-                  >
-                    {this.props.end_date}
-                  </Button>
-                  <Upload
-                    uploadButton={
-                      <Button
-                        startIcon={<UploadFile />}
-                        component="span"
-                        className="cr-sayembara-submission-card--detail-item"
-                      >
-                        Upload Files
-                      </Button>
-                    }
-                    onChange={(value) =>
-                      this.setState({ files: value }, this.fileHandle)
-                    }
-                  />
-                </div>
-              </div>
-            </CardContent>
-            <CardActions className="cr-sayembara-detail-card-footer">
-              <SayembaraSubmitButton {...this.state} />
-            </CardActions>
-          </Card>
+    const sayembaraSubmissionHeaderTitle = (
+      <SayembaraLayout.HeaderTitle>
+        Submission Status
+      </SayembaraLayout.HeaderTitle>
+    );
+    const sayembaraSubmissionBody = (
+      <SayembaraLayout.Body className="cr-sayembara-submission-card-body">
+        <div
+          className={["cr-sayembara-submission-card--status", "submitted"].join(
+            " "
+          )}
+        >
+          {!this.state.isSubmitted ? (
+            <Chip label={<span>No Attempt</span>} />
+          ) : (
+            <Chip label={<span>Submitted</span>} color="success" />
+          )}
         </div>
-      </div>
+        <div className="cr-sayembara-submission-card--detail">
+          <Button
+            startIcon={<DateRange />}
+            className="cr-sayembara-submission-card--detail-item"
+          >
+            {this.props.end_date}
+          </Button>
+          <Button
+            startIcon={<Timer />}
+            className="cr-sayembara-submission-card--detail-item"
+          >
+            {this.props.end_date}
+          </Button>
+          <Upload
+            uploadButton={
+              <Button
+                startIcon={<UploadFile />}
+                component="span"
+                variant="text"
+                style={{ width: "100%" }}
+              >
+                Upload Files
+              </Button>
+            }
+            onChange={(value) =>
+              this.setState({ files: value }, this.fileHandle)
+            }
+          />
+        </div>
+      </SayembaraLayout.Body>
+    );
+
+    const sayembaraSubmissionFooter = !this.state.isSubmitted ? (
+      <SayembaraSubmitButton {...this.state} />
+    ) : (
+      <SayembaraEditSubmitButton {...this.state} />
+    );
+
+    return (
+      <SayembaraLayout
+        headerTitle={sayembaraSubmissionHeaderTitle}
+        body={sayembaraSubmissionBody}
+        footer={sayembaraSubmissionFooter}
+      />
     );
   }
 }

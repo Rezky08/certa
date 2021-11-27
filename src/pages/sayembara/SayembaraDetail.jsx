@@ -10,6 +10,7 @@ import { withParams } from "components/route/WithParams";
 import SayembaraChips from "components/sayembara/SayembaraChips";
 import { Timer } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import SayembaraLayout from "components/SayembaraLayout";
 
 function SayembaraDetailJoinButton({ sayembaraId }) {
   const onClick = () => {
@@ -68,45 +69,35 @@ class SayembaraDetail extends React.Component {
   }
   static Item = SayembaraDetailItem;
   render() {
+    const sayembaraDetailHeaderTitle = (
+      <SayembaraLayout.HeaderTitle>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit
+      </SayembaraLayout.HeaderTitle>
+    );
+    const sayembaraDetailHeaderDetail = (
+      <SayembaraLayout.HeaderDetail>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit
+      </SayembaraLayout.HeaderDetail>
+    );
+    const sayembaraDetailBody = (
+      <SayembaraLayout.Body>
+        <SayembaraDetailItem title="Description" content="" />
+        <SayembaraDetailItem title="Requirements" content="" />
+        <SayembaraDetailItem title="Project Deadline" content="" />
+      </SayembaraLayout.Body>
+    );
+    const sayembaraDetailFooter = this.state.isJoined ? (
+      <SayembaraDetailAddSubmissionButton {...this.state} />
+    ) : (
+      <SayembaraDetailJoinButton {...this.state} />
+    );
     return (
-      <div className="cr-sayembara-detail">
-        <div className="cr-sayembara-detail-banner"></div>
-        <div className="cr-sayembara-detail-container">
-          <Card className="cr-sayembara-detail-card">
-            <CardHeader
-              className="cr-sayembara-detail-card-header--container"
-              title={
-                <div className="cr-sayembara-detail-card-header">
-                  <div className="cr-sayembara-detail-card-header--title">
-                    <span>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit
-                    </span>
-                  </div>
-                  <div className="cr-sayembara-detail-card-header--detail">
-                    <SayembaraChips style={{ justifyContent: "space-around" }}>
-                      <SayembaraChips.Item icon={<Timer />} />
-                    </SayembaraChips>
-                  </div>
-                </div>
-              }
-            />
-            <CardContent className="cr-sayembara-detail-card-body--container">
-              <div className="cr-sayembara-detail-card-body">
-                <SayembaraDetailItem title="Description" content="" />
-                <SayembaraDetailItem title="Requirements" content="" />
-                <SayembaraDetailItem title="Project Deadline" content="" />
-              </div>
-            </CardContent>
-            <CardActions className="cr-sayembara-detail-card-footer">
-              {this.state.isJoined ? (
-                <SayembaraDetailAddSubmissionButton {...this.state} />
-              ) : (
-                <SayembaraDetailJoinButton {...this.state} />
-              )}
-            </CardActions>
-          </Card>
-        </div>
-      </div>
+      <SayembaraLayout
+        headerTitle={sayembaraDetailHeaderTitle}
+        headerDetail={sayembaraDetailHeaderDetail}
+        body={sayembaraDetailBody}
+        footer={sayembaraDetailFooter}
+      />
     );
   }
 }
