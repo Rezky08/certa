@@ -7,6 +7,7 @@ import SayembaraDetail from "./sayembara/SayembaraDetail";
 import SayembaraSubmission from "./sayembara/SayembaraSubmission";
 import PrivateRoute from "components/PrivateRoute";
 import AuthLayoutBody from "components/AuthLayoutBody";
+import SayembaraCreate from "./sayembara/SayembaraCreate";
 
 const pagesWithAuth = [
   {
@@ -35,6 +36,10 @@ const pagesWithAuth = [
             path: "sayembara",
             element: <Outlet />,
             children: [
+              {
+                path: "create",
+                element: <SayembaraCreate />,
+              },
               {
                 path: ":sayembaraId",
                 element: <SayembaraDetail />,

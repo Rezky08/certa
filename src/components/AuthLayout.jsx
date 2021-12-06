@@ -63,10 +63,12 @@ class AuthLayout extends React.Component {
                 </Link>
               </div>
               <div className="cr-bottom-navigation--item">
-                <div className="cr-bottom-navigation--item-create">
-                  <span>+</span>
-                  {/* <Icon icon={<HomeIcon />} size="2rem" /> */}
-                </div>
+                <Link to={{ pathname: "/sayembara/create" }}>
+                  <div className="cr-bottom-navigation--item-create">
+                    <span>+</span>
+                    {/* <Icon icon={<HomeIcon />} size="2rem" /> */}
+                  </div>
+                </Link>
               </div>
               <div className="cr-bottom-navigation--item">
                 <Link to="/notification">

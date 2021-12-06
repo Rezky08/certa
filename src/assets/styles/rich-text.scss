@@ -1,0 +1,26 @@
+@import "./variables.scss";
+
+.RichEditor {
+  &-root {
+    border-radius: $border-corner / 2;
+    border-color: rgba($secondary, $alpha: 0);
+    &.bordered {
+      border: 1px solid #ddd;
+    }
+    &.error {
+      border: 1px solid $color-danger;
+      transition: border 0.1s;
+    }
+  }
+  &-container {
+    display: flex;
+    & > *:not(*:nth-last-child(1)) {
+      border-right: 3px solid $secondary;
+    }
+  }
+  &-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
