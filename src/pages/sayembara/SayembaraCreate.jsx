@@ -1,7 +1,8 @@
 import {
+  Alert,
   Button,
-  FormHelperText,
   MobileStepper,
+  Snackbar,
   TextField,
 } from "@mui/material";
 
@@ -10,6 +11,8 @@ import RichText from "components/RichText";
 import SayembaraLayout from "components/SayembaraLayout";
 import React from "react";
 import Validator from "laravel-reactjs-validation";
+import SayembaraCreateDetailSection from "./SayembaraCreate/SayembaraCreateDetailSection";
+import SayembaraCreateLocationSection from "./SayembaraCreate/SayembaraCreateLocationSection";
 
 class SayembaraCreate extends React.Component {
   constructor(props) {
@@ -20,24 +23,29 @@ class SayembaraCreate extends React.Component {
       maxStep: 2,
       errors: {},
       fields: {
-        title: "",
-        start_date: "",
-        end_date: "",
-        content: "",
+        detailSection: false,
+        locationSection: false,
       },
+      rules: {
+        detailSection: ["required", "accepted"],
+        locationSection: ["required", "accepted"],
+      },
+      labels: {
+        detailSection: { fieldLabel: "Sayembara Detail" },
+        locationSection: { fieldLabel: "Sayembara Location" },
+      },
+      alertIsOpen: false,
+      errorDisplay: "",
     };
     this.changeStep = this.changeStep.bind(this);
     this.setFieldValue = this.setFieldValue.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
+    this.onStepChange = this.onStepChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
 
     this.form = new Validator(this);
-    this.form.useRules({
-      title: ["required"],
-      start_date: ["required"],
-      end_date: ["required"],
-      content: ["required"],
-    });
+    this.form.useRules(this.state.rules);
+    this.form.useLabels(this.state.labels);
   }
 
   onFieldChange() {
@@ -57,114 +65,35 @@ class SayembaraCreate extends React.Component {
 
   componentDidUpdate() {}
 
-  changeStep(value, callback = () => {}) {
-    if (value >= 0 && value <= this.state.maxStep) {
-      this.setState({ step: value ?? this.state.step }, () =>
+  async changeStep(to, callback = () => {}) {
+    if (to >= 0 && to <= this.state.maxStep && (await this.onStepChange())) {
+      this.setState({ step: to ?? this.state.step }, () =>
         callback(this.state.step)
       );
     }
   }
 
-  onStepChange(currentStep) {
-    // TODO : Validate before change
+  async onStepChange() {
+    await this.form.validateAll();
+    let stepKey = Object.keys(this.state.fields)[this.state.step];
+    let errorMessage = this.state.errors[stepKey];
+    let currentStepIsValid = !errorMessage;
+    if (!currentStepIsValid) {
+      this.setState({ alertIsOpen: true, errorDisplay: errorMessage });
+    }
+    return currentStepIsValid;
   }
 
   render() {
     const sayembaraDetailSection = (
-      <section className="cr-sayembara-create-body-section">
-        <span className="cr-sayembara-create-body-section--title">
-          Sayembara Detail
-        </span>
-        <div className="cr-sayembara-create-body-section--form">
-          <TextField
-            label="Title"
-            placeholder="Asian Design Contest"
-            variant={this.state.formVariant}
-            name="title"
-            onBlur={(e) => this.form.eventHandler(e)}
-            onChange={(e) => this.setFieldValue("title", e.target.value)}
-            value={this.state.fields.title}
-            helperText={this.state.errors.title}
-            error={!!this.state.errors.title}
-          />
-
-          <div className="cr-sayembara-create-body-section--form-split">
-            <DatePicker
-              label="Start Date"
-              onChange={(value) => this.setFieldValue("start_date", value)}
-              variant={this.state.formVariant}
-              name="start_date"
-              onBlur={(e) => this.form.eventHandler(e)}
-              value={this.state.fields.start_date}
-              helperText={this.state.errors.start_date}
-              data-attribute-name="Start Date"
-              error={!!this.state.errors.start_date}
-            />
-            <DatePicker
-              label="End Date"
-              onChange={(value) => this.setFieldValue("end_date", value)}
-              variant={this.state.formVariant}
-              name="end_date"
-              onBlur={(e) => this.form.eventHandler(e)}
-              value={this.state.fields.end_date}
-              helperText={this.state.errors.end_date}
-              error={!!this.state.errors.end_date}
-            />
-          </div>
-          <div className="cr-sayembara-create-body-section--form-wrapper">
-            <span className="cr-sayembara-create-body-section--form-title">
-              Sayembara Content
-            </span>
-            <RichText
-              onChange={({ html, plain }) =>
-                this.setFieldValue("content", plain.length > 0 ? html : "")
-              }
-              onBlur={(e) => {
-                this.form.eventHandler(e, "content", "Content", () => {
-                  console.log(this.state.fields);
-                  console.log(this.state.errors);
-                });
-              }}
-              error={!!this.state.errors.content}
-            />
-            <FormHelperText error={!!this.state.errors.content}>
-              {this.state.errors.content}
-            </FormHelperText>
-          </div>
-        </div>
-      </section>
+      <SayembaraCreateDetailSection
+        onChange={(value) => this.setFieldValue("detailSection", value)}
+      />
     );
     const sayembaraLocationSection = (
-      <section className="cr-sayembara-create-body-section">
-        <span className="cr-sayembara-create-body-section--title">
-          Sayembara Detail
-        </span>
-        <div className="cr-sayembara-create-body-section--form">
-          <TextField
-            label="Title"
-            placeholder="Asian Design Contest"
-            variant={this.state.formVariant}
-          />
-          <div className="cr-sayembara-create-body-section--form-split">
-            <DatePicker
-              label="Start Date"
-              onChange={(value) => console.log(value)}
-              variant={this.state.formVariant}
-            />
-            <DatePicker
-              label="End Date"
-              onChange={(value) => console.log(value)}
-              variant={this.state.formVariant}
-            />
-          </div>
-          <div className="cr-sayembara-create-body-section--form-wrapper">
-            <span className="cr-sayembara-create-body-section--form-title">
-              Sayembara Content
-            </span>
-            <RichText />
-          </div>
-        </div>
-      </section>
+      <SayembaraCreateLocationSection
+        onChange={(value) => this.setFieldValue("locationSection", value)}
+      />
     );
     const sayembaraAttachmentSection = (
       <section className="cr-sayembara-create-body-section">
@@ -198,20 +127,34 @@ class SayembaraCreate extends React.Component {
         </div>
       </section>
     );
-    const sayembaraCreateSteps = [
-      sayembaraDetailSection,
-      sayembaraLocationSection,
-      sayembaraAttachmentSection,
-    ];
+    const sayembaraCreateSteps = {
+      detailSection: sayembaraDetailSection,
+      locationSection: sayembaraLocationSection,
+      attachmentSection: sayembaraAttachmentSection,
+    };
     const sayembaraCreateBody = (
       <SayembaraLayout.Body className="cr-sayembara-create-body">
-        {sayembaraDetailSection}
+        {/* {
+          sayembaraCreateSteps[
+            Object.keys(sayembaraCreateSteps)[this.state.step]
+          ]
+        } */}
+        {sayembaraLocationSection}
+        <Snackbar
+          open={this.state.alertIsOpen}
+          autoHideDuration={6000}
+          onClose={() => this.setState({ alertIsOpen: false })}
+        >
+          <Alert severity="error" sx={{ width: "100%" }}>
+            {this.state.errorDisplay}
+          </Alert>
+        </Snackbar>
       </SayembaraLayout.Body>
     );
     const SayembaraStep = (
       <MobileStepper
         variant="dots"
-        steps={sayembaraCreateSteps.length}
+        steps={Object.keys(sayembaraCreateSteps).length}
         position="static"
         activeStep={this.state.step}
         sx={{ flexGrow: 1 }}

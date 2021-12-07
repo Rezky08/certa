@@ -17,7 +17,7 @@ class DatePicker extends React.Component {
         <DatePickerMui
           {...this.props}
           value={this.state.value}
-          onChange={(newValue) =>
+          onAccept={(newValue) =>
             this.setState({ value: newValue }, () =>
               this.props.onChange(this.state.value)
             )
