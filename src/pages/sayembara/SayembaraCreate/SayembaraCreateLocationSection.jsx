@@ -1,23 +1,25 @@
 import React from "react";
-import Validator from "laravel-reactjs-validation";
+// import Validator from "laravel-reactjs-validation";
 import ComboBox from "components/ComboBox";
+import { TextField } from "@mui/material";
+import SayembaraCreateBase from "./SayembaraCreateBase";
 
-class SayembaraCreateLocationSection extends React.Component {
+class SayembaraCreateLocationSection extends SayembaraCreateBase {
   constructor(props) {
     super(props);
     this.state = {
       formVariant: props.formVariant ?? "standard",
       errors: {},
       fields: {
-        province: "",
-        city: "",
-        district: "",
-        sub_district: "",
-        category: "",
-        present_type: "",
-        present_value: "",
-        max_participant: "",
-        max_winner: "",
+        province: props.fields?.province ?? "",
+        city: props.fields?.city ?? "",
+        district: props.fields?.district ?? "",
+        sub_district: props.fields?.sub_district ?? "",
+        category: props.fields?.category ?? "",
+        present_type: props.fields?.present_type ?? "",
+        present_value: props.fields?.present_value ?? "",
+        max_participant: props.fields?.max_participant ?? "",
+        max_winner: props.fields?.max_winner ?? "",
       },
       rules: {
         province: ["required"],
@@ -41,31 +43,24 @@ class SayembaraCreateLocationSection extends React.Component {
         ],
         districts: [],
         sub_districts: [],
-        criterias: [],
-        present_types: [],
+        categories: [
+          {
+            id: 1,
+            label: "Lost Item",
+          },
+        ],
+        present_types: [
+          {
+            id: 1,
+            label: "Money",
+          },
+        ],
       },
     };
-    this.setFieldValue = this.setFieldValue.bind(this);
-    this.onFieldChange = this.onFieldChange.bind(this);
-
-    this.form = new Validator(this);
     this.form.useRules(this.state.rules);
   }
-  setFieldValue(name, value) {
-    // console.log(value?.constructor?.name);
-    let fields = { ...this.state.fields };
-    fields[name] = value ?? this.state.fields[name];
-
-    this.setState({ fields: fields }, this.onFieldChange);
-  }
-
-  onFieldChange() {
-    console.log(this.state.fields);
-    this.props.onChange(Object.keys(this.state.errors).length === 0);
-  }
-
   render() {
-    return (
+    const locationSection = (
       <section className="cr-sayembara-create-body-section">
         <span className="cr-sayembara-create-body-section--title">
           Sayembara Location
@@ -119,11 +114,83 @@ class SayembaraCreateLocationSection extends React.Component {
         </div>
       </section>
     );
+    const criteriaSection = (
+      <section className="cr-sayembara-create-body-section">
+        <span className="cr-sayembara-create-body-section--title">
+          Sayembara Criteria
+        </span>
+        <div className="cr-sayembara-create-body-section--form">
+          <div className="cr-sayembara-create-body-section--form-split">
+            <ComboBox
+              label="Category"
+              variant={this.state.formVariant}
+              name="category"
+              options={this.state.options?.categories}
+              onBlur={(e) => this.form.eventHandler(e)}
+              onChange={({ id }) => this.setFieldValue("category", id)}
+              helperText={this.state.errors?.category}
+              error={!!this.state.errors?.category}
+            />
+          </div>
+          <div className="cr-sayembara-create-body-section--form-split">
+            <ComboBox
+              label="Present Type"
+              variant={this.state.formVariant}
+              name="present_type"
+              options={this.state.options?.present_types}
+              onBlur={(e) => this.form.eventHandler(e)}
+              onChange={({ id }) => this.setFieldValue("present_type", id)}
+              helperText={this.state.errors?.present_type}
+              error={!!this.state.errors?.present_type}
+            />
+
+            <TextField
+              label="Present"
+              variant={this.state.formVariant}
+              name="present_value"
+              onBlur={(e) => this.form.eventHandler(e)}
+              onChange={(e) =>
+                this.setFieldValue("present_value", e.target.value)
+              }
+              helperText={this.state.errors?.present_value}
+              error={!!this.state.errors?.present_value}
+            />
+          </div>
+          <div className="cr-sayembara-create-body-section--form-split">
+            <TextField
+              type="number"
+              label="Max Participant"
+              variant={this.state.formVariant}
+              name="max_participant"
+              onBlur={(e) => this.form.eventHandler(e)}
+              onChange={(e) =>
+                this.setFieldValue("max_participant", e.target.value)
+              }
+              helperText={this.state.errors?.max_participant}
+              error={!!this.state.errors?.max_participant}
+            />
+
+            <TextField
+              type="number"
+              label="Max Winner"
+              variant={this.state.formVariant}
+              name="max_winner"
+              onBlur={(e) => this.form.eventHandler(e)}
+              onChange={(e) => this.setFieldValue("max_winner", e.target.value)}
+              helperText={this.state.errors?.max_winner}
+              error={!!this.state.errors?.max_winner}
+            />
+          </div>
+        </div>
+      </section>
+    );
+    return (
+      <>
+        {locationSection}
+        {criteriaSection}
+      </>
+    );
   }
 }
-
-SayembaraCreateLocationSection.defaultProps = {
-  onChange: () => {},
-};
 
 export default SayembaraCreateLocationSection;

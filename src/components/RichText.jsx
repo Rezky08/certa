@@ -4,7 +4,9 @@ import {
   EditorState,
   RichUtils,
   getDefaultKeyBinding,
+  ContentState,
   convertToRaw,
+  convertFromHTML,
 } from "draft-js";
 import "assets/styles/rich-text.css";
 import "assets/styles/rich-text.scss";
@@ -24,7 +26,16 @@ import draftToHtml from "draftjs-to-html";
 class RichText extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editorState: EditorState.createEmpty() };
+    let blockFromHtml = convertFromHTML(props.value);
+    let content = ContentState.createFromBlockArray(
+      blockFromHtml.contentBlocks,
+      blockFromHtml.entityMap
+    );
+    this.state = {
+      editorState: !!props.value
+        ? EditorState.createWithContent(content)
+        : EditorState.createEmpty(),
+    };
     this.editorRef = createRef();
 
     this.focus = () => this.editorRef.current.focus();

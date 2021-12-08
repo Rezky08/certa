@@ -22,15 +22,34 @@ class SayembaraCreate extends React.Component {
       step: 0,
       maxStep: 2,
       errors: {},
-      fields: {
+      steps: {
         detailSection: false,
         locationSection: false,
       },
-      rules: {
+      stepComponents: {
+        detailSection: React.createRef(),
+        locationSection: React.createRef(),
+      },
+      fields: {
+        title: "",
+        start_date: "",
+        end_date: "",
+        content: "",
+        province: "",
+        city: "",
+        district: "",
+        sub_district: "",
+        category: "",
+        present_type: "",
+        present_value: "",
+        max_participant: "",
+        max_winner: "",
+      },
+      stepRules: {
         detailSection: ["required", "accepted"],
         locationSection: ["required", "accepted"],
       },
-      labels: {
+      stepLabels: {
         detailSection: { fieldLabel: "Sayembara Detail" },
         locationSection: { fieldLabel: "Sayembara Location" },
       },
@@ -43,13 +62,15 @@ class SayembaraCreate extends React.Component {
     this.onStepChange = this.onStepChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
 
-    this.form = new Validator(this);
-    this.form.useRules(this.state.rules);
-    this.form.useLabels(this.state.labels);
+    this.stepValidator = new Validator(this);
+
+    this.stepValidator.useFields("steps");
+    this.stepValidator.useRules(this.state.stepRules);
+    this.stepValidator.useLabels(this.state.stepLabels);
   }
 
   onFieldChange() {
-    // this.form.validate();
+    console.log(this.state.fields);
   }
 
   onBlur(e) {
@@ -62,11 +83,23 @@ class SayembaraCreate extends React.Component {
 
     this.setState({ fields: fields }, this.onFieldChange);
   }
+  setStepValue(name, value) {
+    // console.log(value?.constructor?.name);
+    let steps = { ...this.state.steps };
+    steps[name] = value ?? this.state.steps[name];
+
+    this.setState({ steps: steps }, this.onStepChanged);
+  }
 
   componentDidUpdate() {}
 
   async changeStep(to, callback = () => {}) {
-    if (to >= 0 && to <= this.state.maxStep && (await this.onStepChange())) {
+    if (to >= 0 && to <= this.state.maxStep) {
+      if (this.state.step < to) {
+        if (!(await this.onStepChange())) {
+          return false;
+        }
+      }
       this.setState({ step: to ?? this.state.step }, () =>
         callback(this.state.step)
       );
@@ -74,8 +107,16 @@ class SayembaraCreate extends React.Component {
   }
 
   async onStepChange() {
-    await this.form.validateAll();
-    let stepKey = Object.keys(this.state.fields)[this.state.step];
+    let stepKey = Object.keys(this.state.steps)[this.state.step];
+    let currentStepComponent = this.state.stepComponents[stepKey]?.current;
+    await currentStepComponent?.validateAll();
+
+    this.setStepValue(
+      stepKey,
+      Object.keys(currentStepComponent?.state?.errors).length === 0
+    );
+
+    await this.stepValidator.validateAll();
     let errorMessage = this.state.errors[stepKey];
     let currentStepIsValid = !errorMessage;
     if (!currentStepIsValid) {
@@ -87,12 +128,18 @@ class SayembaraCreate extends React.Component {
   render() {
     const sayembaraDetailSection = (
       <SayembaraCreateDetailSection
-        onChange={(value) => this.setFieldValue("detailSection", value)}
+        onChange={(value) => this.setStepValue("detailSection", value)}
+        ref={this.state.stepComponents.detailSection}
+        setFieldValue={this.setFieldValue}
+        fields={this.state.fields}
       />
     );
     const sayembaraLocationSection = (
       <SayembaraCreateLocationSection
-        onChange={(value) => this.setFieldValue("locationSection", value)}
+        onChange={(value) => this.setStepValue("locationSection", value)}
+        ref={this.state.stepComponents.locationSection}
+        setFieldValue={this.setFieldValue}
+        fields={this.state.fields}
       />
     );
     const sayembaraAttachmentSection = (
@@ -134,15 +181,15 @@ class SayembaraCreate extends React.Component {
     };
     const sayembaraCreateBody = (
       <SayembaraLayout.Body className="cr-sayembara-create-body">
-        {/* {
+        {
           sayembaraCreateSteps[
             Object.keys(sayembaraCreateSteps)[this.state.step]
           ]
-        } */}
-        {sayembaraLocationSection}
+        }
+        {/* {sayembaraLocationSection} */}
         <Snackbar
           open={this.state.alertIsOpen}
-          autoHideDuration={6000}
+          autoHideDuration={3000}
           onClose={() => this.setState({ alertIsOpen: false })}
         >
           <Alert severity="error" sx={{ width: "100%" }}>

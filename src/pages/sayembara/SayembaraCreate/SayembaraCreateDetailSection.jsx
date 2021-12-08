@@ -3,25 +3,23 @@ import { FormHelperText, TextField } from "@mui/material";
 
 import DatePicker from "components/DatePicker";
 import RichText from "components/RichText";
-import Validator from "laravel-reactjs-validation";
+// import Validator from "laravel-reactjs-validation";
+import SayembaraCreateBase from "./SayembaraCreateBase";
 
-class SayembaraCreateDetailSection extends React.Component {
+class SayembaraCreateDetailSection extends SayembaraCreateBase {
   constructor(props) {
     super(props);
     this.state = {
       formVariant: props.formVariant ?? "standard",
       errors: {},
       fields: {
-        title: "",
-        start_date: "",
-        end_date: "",
-        content: "",
+        title: props.fields?.title ?? "",
+        start_date: props.fields?.start_date ?? "",
+        end_date: props.fields?.end_date ?? "",
+        content: props.fields?.content ?? "",
       },
     };
-    this.setFieldValue = this.setFieldValue.bind(this);
-    this.onFieldChange = this.onFieldChange.bind(this);
 
-    this.form = new Validator(this);
     this.form.useRules({
       title: ["required"],
       start_date: ["required", "before_or_equal:end_date"],
@@ -29,18 +27,6 @@ class SayembaraCreateDetailSection extends React.Component {
       content: ["required"],
     });
   }
-  setFieldValue(name, value) {
-    // console.log(value?.constructor?.name);
-    let fields = { ...this.state.fields };
-    fields[name] = value ?? this.state.fields[name];
-
-    this.setState({ fields: fields }, this.onFieldChange);
-  }
-
-  onFieldChange() {
-    this.props.onChange(Object.keys(this.state.errors).length === 0);
-  }
-
   render() {
     return (
       <section className="cr-sayembara-create-body-section">
@@ -66,7 +52,10 @@ class SayembaraCreateDetailSection extends React.Component {
               onChange={(value) => this.setFieldValue("start_date", value)}
               variant={this.state.formVariant}
               name="start_date"
-              onBlur={(e) => this.form.eventHandler(e)}
+              onBlur={(e) => {
+                this.form.eventHandler(e);
+                this.form.eventHandler(e, "end_date");
+              }}
               value={this.state.fields.start_date}
               helperText={this.state.errors?.start_date}
               data-attribute-name="Start Date"
@@ -77,7 +66,10 @@ class SayembaraCreateDetailSection extends React.Component {
               onChange={(value) => this.setFieldValue("end_date", value)}
               variant={this.state.formVariant}
               name="end_date"
-              onBlur={(e) => this.form.eventHandler(e)}
+              onBlur={(e) => {
+                this.form.eventHandler(e);
+                this.form.eventHandler(e, "start_date");
+              }}
               value={this.state.fields.end_date}
               helperText={this.state.errors?.end_date}
               error={!!this.state.errors?.end_date}
@@ -95,6 +87,7 @@ class SayembaraCreateDetailSection extends React.Component {
                 this.form.eventHandler(e, "content", "Content");
               }}
               error={!!this.state.errors?.content}
+              value={this.state.fields.content}
             />
             <FormHelperText error={!!this.state.errors?.content}>
               {this.state.errors?.content}
@@ -105,9 +98,5 @@ class SayembaraCreateDetailSection extends React.Component {
     );
   }
 }
-
-SayembaraCreateDetailSection.defaultProps = {
-  onChange: () => {},
-};
 
 export default SayembaraCreateDetailSection;
