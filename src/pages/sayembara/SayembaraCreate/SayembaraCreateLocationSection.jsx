@@ -7,6 +7,7 @@ import SayembaraCreateBase from "./SayembaraCreateBase";
 class SayembaraCreateLocationSection extends SayembaraCreateBase {
   constructor(props) {
     super(props);
+    console.log(props.fields);
     this.state = {
       formVariant: props.formVariant ?? "standard",
       errors: {},
@@ -76,6 +77,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               onChange={({ id }) => this.setFieldValue("province", id)}
               helperText={this.state.errors?.province}
               error={!!this.state.errors?.province}
+              value={this.state.fields.province}
             />
             <ComboBox
               label="City"
@@ -86,6 +88,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               onChange={({ id }) => this.setFieldValue("city", id)}
               helperText={this.state.errors?.city}
               error={!!this.state.errors?.city}
+              value={this.state.fields.city}
             />
           </div>
           <div className="cr-sayembara-create-body-section--form-split">
@@ -98,6 +101,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               onChange={({ id }) => this.setFieldValue("district", id)}
               helperText={this.state.errors?.district}
               error={!!this.state.errors?.district}
+              value={this.state.fields.city}
             />
 
             <ComboBox
@@ -109,6 +113,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               onChange={({ id }) => this.setFieldValue("sub_district", id)}
               helperText={this.state.errors?.sub_district}
               error={!!this.state.errors?.sub_district}
+              value={this.state.fields.sub_district}
             />
           </div>
         </div>
@@ -130,6 +135,9 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               onChange={({ id }) => this.setFieldValue("category", id)}
               helperText={this.state.errors?.category}
               error={!!this.state.errors?.category}
+              value={this.state.options.categories.find(
+                ({ id }) => this.state.fields.category === id
+              )}
             />
           </div>
           <div className="cr-sayembara-create-body-section--form-split">
@@ -142,6 +150,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               onChange={({ id }) => this.setFieldValue("present_type", id)}
               helperText={this.state.errors?.present_type}
               error={!!this.state.errors?.present_type}
+              value={this.state.fields.present_type}
             />
 
             <TextField
@@ -154,6 +163,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               }
               helperText={this.state.errors?.present_value}
               error={!!this.state.errors?.present_value}
+              value={this.state.fields.present_value}
             />
           </div>
           <div className="cr-sayembara-create-body-section--form-split">
@@ -168,6 +178,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               }
               helperText={this.state.errors?.max_participant}
               error={!!this.state.errors?.max_participant}
+              value={this.state.fields.max_participant}
             />
 
             <TextField
@@ -179,6 +190,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               onChange={(e) => this.setFieldValue("max_winner", e.target.value)}
               helperText={this.state.errors?.max_winner}
               error={!!this.state.errors?.max_winner}
+              value={this.state.fields.max_winner}
             />
           </div>
         </div>
