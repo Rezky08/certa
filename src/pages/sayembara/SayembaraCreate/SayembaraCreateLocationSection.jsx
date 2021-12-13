@@ -3,11 +3,12 @@ import React from "react";
 import ComboBox from "components/ComboBox";
 import { TextField } from "@mui/material";
 import SayembaraCreateBase from "./SayembaraCreateBase";
+import { getSayembaraCategory } from "api/sayembara";
+import { getProvince } from "api/geo";
 
 class SayembaraCreateLocationSection extends SayembaraCreateBase {
   constructor(props) {
     super(props);
-    console.log(props.fields);
     this.state = {
       formVariant: props.formVariant ?? "standard",
       errors: {},
@@ -22,6 +23,14 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
         max_participant: props.fields?.max_participant ?? "",
         max_winner: props.fields?.max_winner ?? "",
       },
+      comboFields: [
+        "province",
+        "city",
+        "district",
+        "sub_district",
+        "category",
+        "present_type",
+      ],
       rules: {
         province: ["required"],
         city: ["required"],
@@ -34,23 +43,23 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
         max_winner: ["required"],
       },
       options: {
-        provinces: [
+        province: [
           { id: 1, label: "DKI Jakarta" },
           { id: 2, label: "Banten" },
         ],
-        cities: [
+        city: [
           { id: 1, label: "Jakarta Selatan" },
           { id: 2, label: "Jakarta Barat" },
         ],
-        districts: [],
-        sub_districts: [],
-        categories: [
+        district: [],
+        sub_district: [],
+        category: [
           {
             id: 1,
             label: "Lost Item",
           },
         ],
-        present_types: [
+        present_type: [
           {
             id: 1,
             label: "Money",
@@ -58,8 +67,61 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
         ],
       },
     };
+    this.state.fields = {
+      ...this.state.fields,
+      province_selected:
+        this.state.options.province.find(
+          (value) => props.fields?.province === value.id
+        ) ?? "",
+      city_selected:
+        this.state.options.city.find(
+          (value) => props.fields?.city === value.id
+        ) ?? "",
+      district_selected:
+        this.state.options.district.find(
+          (value) => props.fields?.district === value.id
+        ) ?? "",
+      sub_district_selected:
+        this.state.options.sub_district.find(
+          (value) => props.fields?.sub_district === value.id
+        ) ?? "",
+      category_selected:
+        this.state.options.category.find(
+          (value) => props.fields?.category === value.id
+        ) ?? "",
+      present_type_selected:
+        this.state.options.present_type.find(
+          (value) => props.fields?.present_type === value.id
+        ) ?? "",
+    };
     this.form.useRules(this.state.rules);
   }
+
+  componentDidMount() {
+    getSayembaraCategory().then((result) => {
+      const { data } = result;
+      this.setOptionValue("category", data);
+    });
+    getProvince().then((result) => {
+      const { data } = result;
+      this.setOptionValue("province", data);
+    });
+  }
+
+  setFieldSelectedValue(options = [], fieldName = "") {
+    let selectedValue = options.find(
+      (value) => this.state.fields[fieldName] === value.id
+    );
+    this.setFieldValue(`${fieldName}_selected`, selectedValue);
+  }
+
+  onFieldChange(fieldName) {
+    super.onFieldChange(fieldName);
+    if (this.state.comboFields.includes(fieldName)) {
+      this.setFieldSelectedValue(this.state.options[fieldName], fieldName);
+    }
+  }
+
   render() {
     const locationSection = (
       <section className="cr-sayembara-create-body-section">
@@ -72,23 +134,25 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               label="Province"
               variant={this.state.formVariant}
               name="province"
-              options={this.state.options?.provinces}
+              getOptionLabel={(option) => option.name ?? ""}
+              options={this.state.options?.province}
               onBlur={(e) => this.form.eventHandler(e)}
               onChange={({ id }) => this.setFieldValue("province", id)}
               helperText={this.state.errors?.province}
               error={!!this.state.errors?.province}
-              value={this.state.fields.province}
+              value={this.state.fields.province_selected}
             />
             <ComboBox
               label="City"
               variant={this.state.formVariant}
               name="city"
-              options={this.state.options?.cities}
+              getOptionLabel={(option) => option.name ?? ""}
+              options={this.state.options?.city}
               onBlur={(e) => this.form.eventHandler(e)}
               onChange={({ id }) => this.setFieldValue("city", id)}
               helperText={this.state.errors?.city}
               error={!!this.state.errors?.city}
-              value={this.state.fields.city}
+              value={this.state.fields.city_selected}
             />
           </div>
           <div className="cr-sayembara-create-body-section--form-split">
@@ -96,24 +160,26 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               label="District"
               variant={this.state.formVariant}
               name="district"
-              options={this.state.options?.districts}
+              getOptionLabel={(option) => option.name ?? ""}
+              options={this.state.options?.district}
               onBlur={(e) => this.form.eventHandler(e)}
               onChange={({ id }) => this.setFieldValue("district", id)}
               helperText={this.state.errors?.district}
               error={!!this.state.errors?.district}
-              value={this.state.fields.city}
+              value={this.state.fields.district_selected}
             />
 
             <ComboBox
               label="Sub District"
               variant={this.state.formVariant}
               name="sub_district"
-              options={this.state.options?.sub_districts}
+              getOptionLabel={(option) => option.name ?? ""}
+              options={this.state.options?.sub_district}
               onBlur={(e) => this.form.eventHandler(e)}
               onChange={({ id }) => this.setFieldValue("sub_district", id)}
               helperText={this.state.errors?.sub_district}
               error={!!this.state.errors?.sub_district}
-              value={this.state.fields.sub_district}
+              value={this.state.fields.sub_district_selected}
             />
           </div>
         </div>
@@ -130,14 +196,13 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               label="Category"
               variant={this.state.formVariant}
               name="category"
-              options={this.state.options?.categories}
+              getOptionLabel={(option) => option.name ?? ""}
+              options={this.state.options?.category}
               onBlur={(e) => this.form.eventHandler(e)}
               onChange={({ id }) => this.setFieldValue("category", id)}
               helperText={this.state.errors?.category}
               error={!!this.state.errors?.category}
-              value={this.state.options.categories.find(
-                ({ id }) => this.state.fields.category === id
-              )}
+              value={this.state.fields.category_selected}
             />
           </div>
           <div className="cr-sayembara-create-body-section--form-split">
@@ -145,12 +210,12 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               label="Present Type"
               variant={this.state.formVariant}
               name="present_type"
-              options={this.state.options?.present_types}
+              options={this.state.options?.present_type}
               onBlur={(e) => this.form.eventHandler(e)}
               onChange={({ id }) => this.setFieldValue("present_type", id)}
               helperText={this.state.errors?.present_type}
               error={!!this.state.errors?.present_type}
-              value={this.state.fields.present_type}
+              value={this.state.fields.present_type_selected}
             />
 
             <TextField

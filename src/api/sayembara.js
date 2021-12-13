@@ -1,0 +1,17 @@
+import api from "./api";
+import { serialize } from "object-to-formdata";
+
+const apiPath = (path) => `sayembara${path ? "/" + path : ""}`;
+
+const createNewSayembara = async (data) => {
+  let formData = serialize(data);
+  return api.post(apiPath(), formData).then(({ data }) => {
+    return data;
+  });
+};
+
+const getSayembaraCategory = async () => {
+  return api.get(apiPath("category")).then(({ data }) => data);
+};
+
+export { createNewSayembara, getSayembaraCategory };

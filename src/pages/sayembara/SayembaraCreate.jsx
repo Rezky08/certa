@@ -1,18 +1,12 @@
-import {
-  Alert,
-  Button,
-  MobileStepper,
-  Snackbar,
-  TextField,
-} from "@mui/material";
+import { Alert, Button, MobileStepper, Snackbar } from "@mui/material";
 
-import DatePicker from "components/DatePicker";
-import RichText from "components/RichText";
 import SayembaraLayout from "components/SayembaraLayout";
 import React from "react";
 import Validator from "laravel-reactjs-validation";
 import SayembaraCreateDetailSection from "./SayembaraCreate/SayembaraCreateDetailSection";
 import SayembaraCreateLocationSection from "./SayembaraCreate/SayembaraCreateLocationSection";
+import SayembaraCreateAttachmentSection from "./SayembaraCreate/SayembaraCreateAttachmentSection";
+import { createNewSayembara } from "api/sayembara";
 
 class SayembaraCreate extends React.Component {
   constructor(props) {
@@ -25,33 +19,38 @@ class SayembaraCreate extends React.Component {
       steps: {
         detailSection: false,
         locationSection: false,
+        attachmentSection: false,
       },
       stepComponents: {
         detailSection: React.createRef(),
         locationSection: React.createRef(),
+        attachmentSection: React.createRef(),
       },
       fields: {
-        title: "",
-        start_date: "",
-        end_date: "",
-        content: "",
-        province: "",
-        city: "",
-        district: "",
-        sub_district: "",
-        category: "",
-        present_type: "",
-        present_value: "",
-        max_participant: "",
-        max_winner: "",
+        title: null,
+        start_date: null,
+        end_date: null,
+        content: null,
+        province: null,
+        city: null,
+        district: null,
+        sub_district: null,
+        category: null,
+        present_type: null,
+        present_value: null,
+        max_participant: null,
+        max_winner: null,
+        attachments: [],
       },
       stepRules: {
         detailSection: ["required", "accepted"],
         locationSection: ["required", "accepted"],
+        attachmentSection: ["required", "accepted"],
       },
       stepLabels: {
         detailSection: { fieldLabel: "Sayembara Detail" },
         locationSection: { fieldLabel: "Sayembara Location" },
+        attachmentSection: { fieldLabel: "Sayembara Attachment" },
       },
       alertIsOpen: false,
       errorDisplay: "",
@@ -61,6 +60,7 @@ class SayembaraCreate extends React.Component {
     this.onFieldChange = this.onFieldChange.bind(this);
     this.onStepChange = this.onStepChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
 
     this.stepValidator = new Validator(this);
 
@@ -69,14 +69,23 @@ class SayembaraCreate extends React.Component {
     this.stepValidator.useLabels(this.state.stepLabels);
   }
 
-  onFieldChange() {
-    console.log(this.state.fields);
+  onSubmit() {
+    this.onStepChange().then(() => {
+      if (Object.keys(this.state.errors).length === 0) {
+        createNewSayembara(this.state.fields);
+      }
+    });
   }
+
+  onFieldChange() {}
 
   onBlur(e) {
     console.log(this.state.errors);
   }
   setFieldValue(name, value) {
+    if (!Object.keys(this.state.fields).includes(name)) {
+      return false;
+    }
     // console.log(value?.constructor?.name);
     let fields = { ...this.state.fields };
     fields[name] = value ?? this.state.fields[name];
@@ -143,36 +152,12 @@ class SayembaraCreate extends React.Component {
       />
     );
     const sayembaraAttachmentSection = (
-      <section className="cr-sayembara-create-body-section">
-        <span className="cr-sayembara-create-body-section--title">
-          Sayembara Detail
-        </span>
-        <div className="cr-sayembara-create-body-section--form">
-          <TextField
-            label="Title"
-            placeholder="Asian Design Contest"
-            variant={this.state.formVariant}
-          />
-          <div className="cr-sayembara-create-body-section--form-split">
-            <DatePicker
-              label="Start Date"
-              onChange={(value) => console.log(value)}
-              variant={this.state.formVariant}
-            />
-            <DatePicker
-              label="End Date"
-              onChange={(value) => console.log(value)}
-              variant={this.state.formVariant}
-            />
-          </div>
-          <div className="cr-sayembara-create-body-section--form-wrapper">
-            <span className="cr-sayembara-create-body-section--form-title">
-              Sayembara Content
-            </span>
-            <RichText />
-          </div>
-        </div>
-      </section>
+      <SayembaraCreateAttachmentSection
+        onChange={(value) => this.setStepValue("attachmentSection", value)}
+        ref={this.state.stepComponents.attachmentSection}
+        setFieldValue={this.setFieldValue}
+        fields={this.state.fields}
+      />
     );
     const sayembaraCreateSteps = {
       detailSection: sayembaraDetailSection,
@@ -181,12 +166,12 @@ class SayembaraCreate extends React.Component {
     };
     const sayembaraCreateBody = (
       <SayembaraLayout.Body className="cr-sayembara-create-body">
-        {
+        {/* {
           sayembaraCreateSteps[
             Object.keys(sayembaraCreateSteps)[this.state.step]
           ]
-        }
-        {/* {sayembaraLocationSection} */}
+        } */}
+        {sayembaraLocationSection}
         <Snackbar
           open={this.state.alertIsOpen}
           autoHideDuration={3000}
@@ -199,29 +184,41 @@ class SayembaraCreate extends React.Component {
       </SayembaraLayout.Body>
     );
     const SayembaraStep = (
-      <MobileStepper
-        variant="dots"
-        steps={Object.keys(sayembaraCreateSteps).length}
-        position="static"
-        activeStep={this.state.step}
-        sx={{ flexGrow: 1 }}
-        nextButton={
+      <section className="cr-sayembara-create-footer">
+        {this.state.step === Object.keys(sayembaraCreateSteps).length - 1 ? (
           <Button
-            size="small"
-            onClick={() => this.changeStep(this.state.step + 1)}
+            variant="contained"
+            fullWidth
+            onClick={this.onSubmit}
+            className="cr-button"
           >
-            Next
+            Submit
           </Button>
-        }
-        backButton={
-          <Button
-            size="small"
-            onClick={() => this.changeStep(this.state.step - 1)}
-          >
-            Back
-          </Button>
-        }
-      />
+        ) : null}
+        <MobileStepper
+          variant="dots"
+          steps={Object.keys(sayembaraCreateSteps).length}
+          position="static"
+          activeStep={this.state.step}
+          sx={{ flexGrow: 1 }}
+          nextButton={
+            <Button
+              size="small"
+              onClick={() => this.changeStep(this.state.step + 1)}
+            >
+              Next
+            </Button>
+          }
+          backButton={
+            <Button
+              size="small"
+              onClick={() => this.changeStep(this.state.step - 1)}
+            >
+              Back
+            </Button>
+          }
+        />
+      </section>
     );
     return (
       <SayembaraLayout body={sayembaraCreateBody} footer={SayembaraStep} />
