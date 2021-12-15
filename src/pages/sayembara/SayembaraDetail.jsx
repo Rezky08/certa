@@ -3,6 +3,8 @@ import { Button } from "@mui/material";
 import { withParams } from "components/route/WithParams";
 import { Link } from "react-router-dom";
 import SayembaraLayout from "components/SayembaraLayout";
+import Interweave from "interweave";
+import { getSayembara, getSayembaraList } from "api/sayembara";
 
 function SayembaraDetailJoinButton({ sayembaraId }) {
   const onClick = () => {
@@ -55,15 +57,25 @@ class SayembaraDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sayembaraId: 1,
+      sayembaraId: props?.params?.sayembaraId ?? null,
       isJoined: true,
+      sayembara: {},
     };
   }
+
+  componentDidMount() {
+    if (this.state.sayembaraId) {
+      getSayembara(this.state.sayembaraId).then(({ data }) => {
+        this.setState({ sayembara: data }, () => console.log(this.state));
+      });
+    }
+  }
+
   static Item = SayembaraDetailItem;
   render() {
     const sayembaraDetailHeaderTitle = (
       <SayembaraLayout.HeaderTitle>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit
+        {this.state.sayembara.title}
       </SayembaraLayout.HeaderTitle>
     );
     const sayembaraDetailHeaderDetail = (
@@ -73,9 +85,10 @@ class SayembaraDetail extends React.Component {
     );
     const sayembaraDetailBody = (
       <SayembaraLayout.Body>
-        <SayembaraDetailItem title="Description" content="" />
+        {<Interweave content={this.state?.sayembara?.content} />}
+        {/* <SayembaraDetailItem title="Description" content="" />
         <SayembaraDetailItem title="Requirements" content="" />
-        <SayembaraDetailItem title="Project Deadline" content="" />
+        <SayembaraDetailItem title="Project Deadline" content="" /> */}
       </SayembaraLayout.Body>
     );
     const sayembaraDetailFooter = this.state.isJoined ? (
