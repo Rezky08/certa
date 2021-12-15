@@ -21,18 +21,10 @@ const getDistrict = async (params) => {
       return data;
     });
 };
-const getSubDistrict = async (
-  provinceName = "",
-  cityName = "",
-  districtName = ""
-) => {
+const getSubDistrict = async (params) => {
   return api
     .get(apiPath("subdistrict"), {
-      params: {
-        provinceName: provinceName,
-        city: cityName,
-        district: districtName,
-      },
+      params: params,
     })
     .then(({ data }) => {
       return data;

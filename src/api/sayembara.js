@@ -14,4 +14,8 @@ const getSayembaraCategory = async () => {
   return api.get(apiPath("category")).then(({ data }) => data);
 };
 
-export { createNewSayembara, getSayembaraCategory };
+const getSayembaraPresentType = async () => {
+  return api.get(apiPath("present/type")).then(({ data }) => data);
+};
+
+export { createNewSayembara, getSayembaraCategory, getSayembaraPresentType };

@@ -166,12 +166,12 @@ class SayembaraCreate extends React.Component {
     };
     const sayembaraCreateBody = (
       <SayembaraLayout.Body className="cr-sayembara-create-body">
-        {/* {
+        {
           sayembaraCreateSteps[
             Object.keys(sayembaraCreateSteps)[this.state.step]
           ]
-        } */}
-        {sayembaraLocationSection}
+        }
+        {/* {sayembaraLocationSection} */}
         <Snackbar
           open={this.state.alertIsOpen}
           autoHideDuration={3000}

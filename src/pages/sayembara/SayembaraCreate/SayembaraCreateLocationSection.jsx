@@ -3,8 +3,8 @@ import React from "react";
 import ComboBox from "components/ComboBox";
 import { TextField } from "@mui/material";
 import SayembaraCreateBase from "./SayembaraCreateBase";
-import { getSayembaraCategory } from "api/sayembara";
-import { getCity, getDistrict, getProvince } from "api/geo";
+import { getSayembaraCategory, getSayembaraPresentType } from "api/sayembara";
+import { getCity, getDistrict, getProvince, getSubDistrict } from "api/geo";
 
 class SayembaraCreateLocationSection extends SayembaraCreateBase {
   constructor(props) {
@@ -87,11 +87,11 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
         ) ?? "",
       category_selected:
         this.state.options.category.find(
-          (value) => props.fields?.category === value.id
+          (value) => props.fields?.category === value.name
         ) ?? "",
       present_type_selected:
         this.state.options.present_type.find(
-          (value) => props.fields?.present_type === value.id
+          (value) => props.fields?.present_type === value
         ) ?? "",
     };
     this.form.useRules(this.state.rules);
@@ -102,6 +102,10 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
     getSayembaraCategory().then((result) => {
       const { data } = result;
       this.setOptionValue("category", data);
+    });
+    getSayembaraPresentType().then((result) => {
+      const { data } = result;
+      this.setOptionValue("present_type", data);
     });
     getProvince().then((result) => {
       const { data } = result;
@@ -126,6 +130,16 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
           this.setOptionValue("district", data);
         });
         break;
+      case "district":
+        getSubDistrict({
+          province_id: this.state.fields.province,
+          city_id: this.state.fields.city,
+          district_id: this.state.fields.district,
+        }).then((result) => {
+          const { data } = result;
+          this.setOptionValue("sub_district", data);
+        });
+        break;
 
       default:
         break;
@@ -134,7 +148,10 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
 
   setFieldSelectedValue(options = [], fieldName = "") {
     let selectedValue = options.find(
-      (value) => this.state.fields[fieldName] === value.id
+      (value) =>
+        this.state.fields[fieldName] === value.id ||
+        this.state.fields[fieldName] === value.name ||
+        this.state.fields[fieldName] === value
     );
     selectedValue = selectedValue ?? "";
 
@@ -233,7 +250,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               options={this.state.options?.category}
               onBlur={(e) => this.form.eventHandler(e)}
               onChange={(value) =>
-                this.setFieldValue("category", value?.id ?? "")
+                this.setFieldValue("category", value?.name ?? "")
               }
               helperText={this.state.errors?.category}
               error={!!this.state.errors?.category}
@@ -248,7 +265,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               options={this.state.options?.present_type}
               onBlur={(e) => this.form.eventHandler(e)}
               onChange={(value) =>
-                this.setFieldValue("present_type", value?.id ?? "")
+                this.setFieldValue("present_type", value ?? "")
               }
               helperText={this.state.errors?.present_type}
               error={!!this.state.errors?.present_type}
