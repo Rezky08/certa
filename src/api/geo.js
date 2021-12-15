@@ -7,17 +7,15 @@ const getProvince = async (name = "") => {
     return data;
   });
 };
-const getCity = async (provinceName = "") => {
-  return api
-    .get(apiPath("city"), { params: { province: provinceName } })
-    .then(({ data }) => {
-      return data;
-    });
+const getCity = async (params) => {
+  return api.get(apiPath("city"), { params: params }).then(({ data }) => {
+    return data;
+  });
 };
-const getDistrict = async (provinceName = "", cityName = "") => {
+const getDistrict = async (params) => {
   return api
     .get(apiPath("district"), {
-      params: { provinceName: provinceName, city: cityName },
+      params: params,
     })
     .then(({ data }) => {
       return data;
@@ -41,4 +39,4 @@ const getSubDistrict = async (
     });
 };
 
-export { getProvince };
+export { getProvince, getCity, getDistrict, getSubDistrict };

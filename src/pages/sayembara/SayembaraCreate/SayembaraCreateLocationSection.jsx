@@ -4,7 +4,7 @@ import ComboBox from "components/ComboBox";
 import { TextField } from "@mui/material";
 import SayembaraCreateBase from "./SayembaraCreateBase";
 import { getSayembaraCategory } from "api/sayembara";
-import { getProvince } from "api/geo";
+import { getCity, getDistrict, getProvince } from "api/geo";
 
 class SayembaraCreateLocationSection extends SayembaraCreateBase {
   constructor(props) {
@@ -95,6 +95,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
         ) ?? "",
     };
     this.form.useRules(this.state.rules);
+    this.getChainedOptions = this.getChainedOptions.bind(this);
   }
 
   componentDidMount() {
@@ -108,10 +109,35 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
     });
   }
 
+  getChainedOptions(fieldName = "") {
+    switch (fieldName) {
+      case "province":
+        getCity({ province_id: this.state.fields.province }).then((result) => {
+          const { data } = result;
+          this.setOptionValue("city", data);
+        });
+        break;
+      case "city":
+        getDistrict({
+          province_id: this.state.fields.province,
+          city_id: this.state.fields.city,
+        }).then((result) => {
+          const { data } = result;
+          this.setOptionValue("district", data);
+        });
+        break;
+
+      default:
+        break;
+    }
+  }
+
   setFieldSelectedValue(options = [], fieldName = "") {
     let selectedValue = options.find(
       (value) => this.state.fields[fieldName] === value.id
     );
+    selectedValue = selectedValue ?? "";
+
     this.setFieldValue(`${fieldName}_selected`, selectedValue);
   }
 
@@ -119,6 +145,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
     super.onFieldChange(fieldName);
     if (this.state.comboFields.includes(fieldName)) {
       this.setFieldSelectedValue(this.state.options[fieldName], fieldName);
+      this.getChainedOptions(fieldName);
     }
   }
 
@@ -137,7 +164,9 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               getOptionLabel={(option) => option.name ?? ""}
               options={this.state.options?.province}
               onBlur={(e) => this.form.eventHandler(e)}
-              onChange={({ id }) => this.setFieldValue("province", id)}
+              onChange={(value) =>
+                this.setFieldValue("province", value?.id ?? "")
+              }
               helperText={this.state.errors?.province}
               error={!!this.state.errors?.province}
               value={this.state.fields.province_selected}
@@ -149,7 +178,7 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               getOptionLabel={(option) => option.name ?? ""}
               options={this.state.options?.city}
               onBlur={(e) => this.form.eventHandler(e)}
-              onChange={({ id }) => this.setFieldValue("city", id)}
+              onChange={(value) => this.setFieldValue("city", value?.id ?? "")}
               helperText={this.state.errors?.city}
               error={!!this.state.errors?.city}
               value={this.state.fields.city_selected}
@@ -163,7 +192,9 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               getOptionLabel={(option) => option.name ?? ""}
               options={this.state.options?.district}
               onBlur={(e) => this.form.eventHandler(e)}
-              onChange={({ id }) => this.setFieldValue("district", id)}
+              onChange={(value) =>
+                this.setFieldValue("district", value?.id ?? "")
+              }
               helperText={this.state.errors?.district}
               error={!!this.state.errors?.district}
               value={this.state.fields.district_selected}
@@ -176,7 +207,9 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               getOptionLabel={(option) => option.name ?? ""}
               options={this.state.options?.sub_district}
               onBlur={(e) => this.form.eventHandler(e)}
-              onChange={({ id }) => this.setFieldValue("sub_district", id)}
+              onChange={(value) =>
+                this.setFieldValue("sub_district", value?.id ?? "")
+              }
               helperText={this.state.errors?.sub_district}
               error={!!this.state.errors?.sub_district}
               value={this.state.fields.sub_district_selected}
@@ -199,7 +232,9 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               getOptionLabel={(option) => option.name ?? ""}
               options={this.state.options?.category}
               onBlur={(e) => this.form.eventHandler(e)}
-              onChange={({ id }) => this.setFieldValue("category", id)}
+              onChange={(value) =>
+                this.setFieldValue("category", value?.id ?? "")
+              }
               helperText={this.state.errors?.category}
               error={!!this.state.errors?.category}
               value={this.state.fields.category_selected}
@@ -212,7 +247,9 @@ class SayembaraCreateLocationSection extends SayembaraCreateBase {
               name="present_type"
               options={this.state.options?.present_type}
               onBlur={(e) => this.form.eventHandler(e)}
-              onChange={({ id }) => this.setFieldValue("present_type", id)}
+              onChange={(value) =>
+                this.setFieldValue("present_type", value?.id ?? "")
+              }
               helperText={this.state.errors?.present_type}
               error={!!this.state.errors?.present_type}
               value={this.state.fields.present_type_selected}
